@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div class="inputbox">
+		<select id="runeIWant" onchange="setBaseRuneSelectList();"> 
+			<option hidden>룬 선택</option>
+		</select> 룬을 만들기 위해 필요한 
+	</div>
+	<div class="inputbox">
+		<select id="baseRune" disabled onchange="getAmountOfRune();">
+			<option hidden>위 항목 선택 시 활성화</option>
+		</select> 룬의 개수 :
+		<span id="result"></span>
+	</div>
+	<!-- <input type="text" id="baseRune"><button>계산하기</button>
+	<input type="text" id="runeIWant" > -->
+	<!-- <input type="text" id="numOfMyRune" readonly>개 필요합니다. -->
+</body>
+<style>
+	.inputbox{
+		margin-bottom:20px;
+	}
+	.inputbox select{
+		height:50px; 
+		width:200px;
+	}
+</style>
+<script>
+	function $(id){
+		return document.getElementById(id);
+	}
+
+	// const runeArray = [
+	// 	el, eld, tir, nef, eth, ith, tal, ral, ort, thul, amn, sol, shael, dol, hel, io, lum, ko, fal, lem, pul, um, mal, ist, gul, vex, ohm, lo, sur, ber, jah, cham, zod
+	// ] 
+
+
+
+	const runeList = {
+		el: {
+			kname:'엘',
+			num:1
+		},
+		eld:{
+			kname:'엘드',
+			num:2
+		},
+		tir:{
+			kname:'티르',
+			num:3
+		},
+		nef:{
+			kname:'네프',
+			num:4
+		},
+		eth:{
+			kname:'에드',
+			num:5
+		},
+		ith:{
+			kname:'아이드',
+			num:6
+		},
+		tal:{
+			kname:'탈',
+			num:7
+		},
+		ral:{
+			kname:'랄',
+			num:8
+		},
+		ort:{
+			kname:'오르트',
+			num:9
+		},
+		thul:{
+			kname:'주울',
+			num:10
+		},
+		amn:{
+			kname:'앰',
+			num:11
+		},
+		sol:{
+			kname:'솔',
+			num:12
+		},
+		shael:{
+			kname:'샤에',
+			num:13
+		},
+		dol:{
+			kname:'돌',
+			num:14
+		},
+		hel:{
+			kname:'헬',
+			num:15
+		},
+		io:{
+			kname:'이오',
+			num:16
+		},
+		lum:{
+			kname:'룸',
+			num:17
+		},
+		ko:{
+			kname:'코',
+			num:18
+		},
+		fal:{
+			kname:'팔',
+			num:19
+		},
+		lem:{
+			kname:'렘',
+			num:20
+		},
+		pul:{
+			kname:'풀',
+			num:21
+		},
+		um:{
+			kname:'움',
+			num:22
+		},
+		mal:{
+			kname:'말',
+			num:23
+		},
+		ist:{
+			kname:'이스트',
+			num:24
+		},
+		gul:{
+			kname:'굴',
+			num:25
+		},
+		vex:{
+			kname:'벡스',
+			num:26
+		},
+		ohm:{
+			kname:'오움',
+			num:27
+		},
+		lo:{
+			kname:'로',
+			num:28
+		},
+		sur:{
+			kname:'수르',
+			num:29
+		},
+		ber:{
+			kname:'베르',
+			num:30
+		},
+		jah:{
+			kname:'자',
+			num:31
+		},
+		cham:{
+			kname:'참',
+			num:32
+		},
+		zod:{
+			kname:'조드',
+			num:33
+		}
+	}
+	// const runeNameList = [];
+	const baseRune = $('baseRune');
+	const runeIWant = $('runeIWant');
+	const result = $('result');
+	const runeLengthByKeys = Object.keys(runeList);
+	const runeLengthByValues = Object.values(runeList);
+
+	for(let i = 1; i<runeLengthByValues.length; i++){
+		let optionTag = document.createElement('option');
+		optionTag.setAttribute('value', runeLengthByValues[i].num);
+		optionTag.innerHTML = runeLengthByValues[i].kname + '('+ runeLengthByKeys[i] +',' + runeLengthByValues[i].num + ')'
+		runeIWant.appendChild(optionTag);
+	}
+	const setBaseRuneSelectList = () =>{
+		let maxRuneNum = parseInt(runeIWant.value) - 1;
+		baseRune.removeAttribute('disabled');
+		if(parseInt(baseRune.value) != NaN && runeIWant.value > baseRune.value ){
+			getAmountOfRune();
+		}
+		else{
+			
+			baseRune.innerHTML = '<option hidden>룬 선택</option>';
+			result.innerHTML = '';
+		}
+		for(let i = 0; i<maxRuneNum; i++){
+			let optionTag = document.createElement('option');
+			optionTag.setAttribute('value', runeLengthByValues[i].num);
+			optionTag.innerHTML = runeLengthByValues[i].kname + '('+ runeLengthByKeys[i] +',' + runeLengthByValues[i].num + ')'
+			baseRune.appendChild(optionTag);
+		}
+	}
+	
+	const getAmountOfRune = () =>{
+		let baseRuneVal = baseRune.value;
+		let runeIWantVal = runeIWant.value;
+		let lowRuneCraftVal = 3;
+		let highRuneCraftVal = 2; 
+		let totalRuneAmount;
+		if(runeIWantVal < 22 && baseRuneVal < 21){
+			totalRuneAmount = 3;
+			for(let i = baseRuneVal; i<runeIWantVal-1; i++){
+				totalRuneAmount *= lowRuneCraftVal;
+			}
+			console.log(totalRuneAmount);
+			result.innerHTML = totalRuneAmount +'개'; 
+			return;
+		}
+		else if(runeIWantVal > 21 && baseRuneVal < 21){
+			totalRuneAmount = 3;
+			for(let i = baseRuneVal; i < 20; i++){
+				totalRuneAmount *= lowRuneCraftVal;
+			}
+			for(let i = 21; i< runeIWantVal; i++){
+				totalRuneAmount *= highRuneCraftVal;
+			}
+			console.log('totalRuneAmount:' + totalRuneAmount);
+			result.innerHTML = totalRuneAmount +'개'; 
+			return;
+		}
+		else if(runeIWantVal >= 21 && baseRuneVal >= 21){
+			totalRuneAmount = 2; 
+			for(let i = baseRuneVal; i< runeIWantVal-1; i++){
+				totalRuneAmount *= highRuneCraftVal;
+			}
+			console.log('totalRuneAmount:' + totalRuneAmount);
+			result.innerHTML = totalRuneAmount +'개'; 
+			return;
+		}
+
+	} 
+</script>
+</html>
